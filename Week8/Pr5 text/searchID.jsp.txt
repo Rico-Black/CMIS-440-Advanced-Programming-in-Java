@@ -1,0 +1,68 @@
+<%-- 
+    Document   : searchID
+    Created on : Dec 12, 2022, 11:55:31 AM
+    Author     : Travis
+--%>
+<%@page import="java.sql.ResultSet"%>
+<%@page import="java.sql.Statement"%>
+<%@page import="java.sql.DriverManager"%>
+<%@page import="java.sql.Connection"%>
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title>JSP Page</title>
+    </head>
+    <body>
+        <center>
+        <table border ='1'>
+            <tr>
+              <tr>
+                <th> ID</th>
+                <th>FirstName </th>
+                <th> LastName</th>
+                <th> Email</th>
+               <th> Age</th> 
+               <th> Major</th>
+            </tr>
+            
+             <%
+            try{ //retrive data from database
+                
+                //initilize JDBC driver
+           Class.forName("org.apache.derby.jdbc.ClientDriver");
+           //establish the connection to database
+          Connection con = DriverManager.getConnection("jdbc:derby://localhost:1527/user","root","root");
+           //create statement object to exicute queries
+          Statement stmt = con.createStatement();
+          //display data from table
+         String tID = request.getParameter("ID");
+         int ID = Integer.parseInt(tID);
+          String str = "select * from root.student where ID=" +ID+ "";
+          ResultSet rs = stmt.executeQuery(str);
+          
+          while(rs.next()){
+             %> 
+              <tr>
+                 <td><%=rs.getInt("ID")%> </td>
+                 <td><%=rs.getString("FirstName")%> </td>
+                 <td><%=rs.getString("LastName")%> </td>
+                 <td><%=rs.getString("Email")%> </td> 
+                 <td><%=rs.getInt("Age")%> </td>
+                 <td><%=rs.getString("Major")%> </td>
+             </tr>    
+            <%    }
+            }
+            catch(Exception e){
+                System.out.print(e.getMessage());
+            }
+            %>
+        </table>
+        
+    </center>
+    
+     <br/>
+        <a href= "index.html">Return to main menu. </a>
+    </body>
+</html>
